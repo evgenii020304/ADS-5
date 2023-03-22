@@ -35,11 +35,11 @@ int getPrior(char op) {
   return prior;
 }
 
-std::string space1(const std::string& s){
+std::string space1(const std::string& s) {
   if (s.length() <= 2) return s;
   int n = 2 - s.length() % 2;
   std::string r(s, 0, n);
-  for (auto it = s.begin() + n; it != s.end();){
+  for (auto it = s.begin() + n; it != s.end();) {
     r += ' '; r += *it++;;
   }
   return r;
@@ -55,8 +55,7 @@ std::string infx2pstfx(std::string inf) {
     } else {
       if (stack1.get() < prior || prior == 0 || stack1.isEmpty()) {
         stack1.push(op);
-      }
-      else if (op == ')') {
+      } else if (op == ')') {
         char sm = stack1.get();
         while (getPrior(sm) >= prior) {
           work += sm;
@@ -92,6 +91,7 @@ int count(const int& a, const int& b, const int& oper) {
     case'*': return a * b;
     case'/': return a / b;
   }
+  return 0;
 }
 
 int eval(std::string pref) {
@@ -101,8 +101,7 @@ int eval(std::string pref) {
     if (getPrior(pref[i]) == -1) {
       if (pref[i] == ' ') {
         continue;
-      }
-      else if (isdigit(pref[i+1])) {
+      } else if (isdigit(pref[i+1])) {
         num += pref[i];
         continue;
       }	else {
