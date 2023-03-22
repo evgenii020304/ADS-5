@@ -35,8 +35,32 @@ int getPrior(char op) {
   return prior;
 }
 
+std::string Spaces(std::string str) {
+  std::string spaces = "";
+  for (size_t i = 0; i < str.size(); i++) {
+    if (str[i] == '+') {
+      str.replace(i, 1, " + ");
+      i += 2;
+    }
+    if (str[i] == '-') {
+      str.replace(i, 1, " - ");
+      i += 2;
+    }
+    if (str[i] == '*') {
+      str.replace(i, 1, " * ");
+      i += 2;
+    }
+    if (str[i] == '/') {
+      str.replace(i, 1, " / ");
+      i += 2;
+    }
+  }
+  return str;
+}
+
 std::string infx2pstfx(std::string inf) {
   std::string work;
+  inf = Spaces(inf);
   TStack<char, 100> stack1;
   for (auto& op : inf) {
     int prior = getPrior(op);
