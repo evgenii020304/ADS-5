@@ -58,6 +58,21 @@ std::string Spaces(std::string str) {
   return str;
 }
 
+std::string removeSpaces(std::string str){
+  str.erase(remove(str.begin(), str.end(), ' '), str.end());
+  return str;
+}
+
+std::string space1(const std::string& s){
+  if (s.length() <= 2) return s;
+  int n = 2 - s.length() % 2;
+  std::string r(s, 0, n);
+  for (auto it = s.begin() + n; it != s.end();){
+    r += ' '; r += *it++;;
+  }
+  return r;
+}
+
 std::string infx2pstfx(std::string inf) {
   std::string work;
   inf = Spaces(inf);
@@ -92,6 +107,7 @@ std::string infx2pstfx(std::string inf) {
     work += stack1.get();
     stack1.pop();
   }
+  work = space1(removeSpaces(work));
   return work;
 }
 
