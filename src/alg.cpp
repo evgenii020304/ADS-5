@@ -104,7 +104,7 @@ int eval(std::string pref) {
       } else if (isdigit(pref[i+1])) {
         num += pref[i];
         continue;
-      }	else {
+      } else {
         num += pref[i];
         stack1.push(atoi(num.c_str()));
         num = "";
