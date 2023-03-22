@@ -4,7 +4,7 @@
 #include "tstack.h"
 
 int getPrior(char op) {
-  std::pair <char, int> priority[6];
+  std::pair<char, int> priority[6];
   switch (op) {
     case'(':
       priority[0].first = '(';
@@ -35,6 +35,16 @@ int getPrior(char op) {
   return prior;
 }
 
+std::string space1(const std::string& s){
+  if (s.length() <= 2) return s;
+  int n = 2 - s.length() % 2;
+  std::string r(s, 0, n);
+  for (auto it = s.begin() + n; it != s.end();){
+    r += ' '; r += *it++;;
+  }
+  return r;
+}
+
 std::string infx2pstfx(std::string inf) {
   std::string work;
   TStack<char, 100> stack1;
@@ -45,7 +55,8 @@ std::string infx2pstfx(std::string inf) {
     } else {
       if (stack1.get() < prior || prior == 0 || stack1.isEmpty()) {
         stack1.push(op);
-      } else if (op == ')') {
+      }
+      else if (op == ')') {
         char sm = stack1.get();
         while (getPrior(sm) >= prior) {
           work += sm;
@@ -68,6 +79,7 @@ std::string infx2pstfx(std::string inf) {
     work += stack1.get();
     stack1.pop();
   }
+  work = space1(work);
   return work;
 }
 
@@ -80,22 +92,30 @@ int count(const int& a, const int& b, const int& oper) {
     case'*': return a * b;
     case'/': return a / b;
   }
-  return 0;
 }
 
 int eval(std::string pref) {
-  TStack<char, 100> stack1;
-  for (auto& oper : pref) {
-    if (getPrior(oper) == -1) {
-      char ch[2] = {oper, '\0'};
-      int r = std::stoi(ch);
-      stack1.push(r);
+  TStack<int, 100> stack1;
+  std::string num = "";
+  for (size_t i = 0; i < pref.size(); i++) {
+    if (getPrior(pref[i]) == -1) {
+      if (pref[i] == ' ') {
+        continue;
+      }
+      else if (isdigit(pref[i+1])) {
+        num += pref[i];
+        continue;
+      }	else {
+        num += pref[i];
+        stack1.push(atoi(num.c_str()));
+        num = "";
+      }
     } else {
       int b = stack1.get();
       stack1.pop();
       int a = stack1.get();
       stack1.pop();
-      stack1.push(count(a, b, oper));
+      stack1.push(count(a, b, pref[i]));
     }
   }
   return stack1.get();
