@@ -35,47 +35,8 @@ int getPrior(char op) {
   return prior;
 }
 
-std::string Spaces(std::string str) {
-  std::string spaces = "";
-  for (size_t i = 0; i < str.size(); i++) {
-    if (str[i] == '+') {
-      str.replace(i, 1, " + ");
-      i += 2;
-    }
-    if (str[i] == '-') {
-      str.replace(i, 1, " - ");
-      i += 2;
-    }
-    if (str[i] == '*') {
-      str.replace(i, 1, " * ");
-      i += 2;
-    }
-    if (str[i] == '/') {
-      str.replace(i, 1, " / ");
-      i += 2;
-    }
-  }
-  return str;
-}
-
-std::string removeSpaces(std::string str){
-  str.erase(remove(str.begin(), str.end(), ' '), str.end());
-  return str;
-}
-
-std::string space1(const std::string& s){
-  if (s.length() <= 2) return s;
-  int n = 2 - s.length() % 2;
-  std::string r(s, 0, n);
-  for (auto it = s.begin() + n; it != s.end();){
-    r += ' '; r += *it++;;
-  }
-  return r;
-}
-
 std::string infx2pstfx(std::string inf) {
   std::string work;
-  inf = Spaces(inf);
   TStack<char, 100> stack1;
   for (auto& op : inf) {
     int prior = getPrior(op);
@@ -107,7 +68,6 @@ std::string infx2pstfx(std::string inf) {
     work += stack1.get();
     stack1.pop();
   }
-  work = space1(removeSpaces(work));
   return work;
 }
 
@@ -124,26 +84,18 @@ int count(const int& a, const int& b, const int& oper) {
 }
 
 int eval(std::string pref) {
-  TStack<int, 100> stack1;
-  std::string num = "";
-  for (size_t i = 0; i < pref.size(); i++) {
-    if (getPrior(pref[i]) == -1) {
-      if (pref[i] == ' ') {
-        continue;
-      } else if (isdigit(pref[i+1])) {
-        num += pref[i];
-        continue;
-      } else {
-        num += pref[i];
-        stack1.push(atoi(num.c_str()));
-        num = "";
-      }
+  TStack<char, 100> stack1;
+  for (auto& oper : pref) {
+    if (getPrior(oper) == -1) {
+      char ch[2] = {oper, '\0'};
+      int r = std::stoi(ch);
+      stack1.push(r);
     } else {
       int b = stack1.get();
       stack1.pop();
       int a = stack1.get();
       stack1.pop();
-      stack1.push(count(a, b, pref[i]));
+      stack1.push(count(a, b, oper));
     }
   }
   return stack1.get();
