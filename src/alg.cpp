@@ -80,6 +80,7 @@ int count(const int& a, const int& b, const int& oper) {
     case'*': return a * b;
     case'/': return a / b;
   }
+  return 0;
 }
 
 int eval(std::string pref) {
