@@ -4,7 +4,7 @@
 #include "tstack.h"
 
 int getPrior(char op) {
-  std::pair<char, int> priority[6];
+  std::pair <char, int> priority[6];
   switch (op) {
     case'(':
       priority[0].first = '(';
@@ -37,7 +37,7 @@ int getPrior(char op) {
 
 std::string infx2pstfx(std::string inf) {
   std::string work;
-  Tstack<char, 100> stack1;
+  TStack<char, 100> stack1;
   for (auto& op : inf) {
     int prior = getPrior(op);
     if (prior == -1) {
@@ -83,7 +83,7 @@ int count(const int& a, const int& b, const int& oper) {
 }
 
 int eval(std::string pref) {
-  Tstack<int, 100> stack1;
+  TStack<int, 100> stack1;
   std::string num = "";
   for (size_t i = 0; i < pref.size(); i++) {
     if (getPrior(pref[i]) == -1) {
